@@ -11,6 +11,10 @@ router.get('/test_nodejs', function (req, res) {
   res.send('hellow dura4ok');
 })
 
+router.get('/style.css', function (req, res) {
+  res.sendfile('style.css');
+})
+
 app.use("/", router);
 
 app.listen(port, () => {
