@@ -15,6 +15,10 @@ router.get('/style.css', function (req, res) {
   res.sendfile('style.css');
 })
 
+router.get(/.*mp4/, function (req, res) {
+  res.sendfile('extreme-angry-bunny-angry-bunny.mp4');
+})
+
 app.use("/", router);
 
 app.listen(port, () => {
