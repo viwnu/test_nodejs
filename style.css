@@ -1,3 +1,16 @@
-.color {
-  color: red;
+body {
+  font-size: 10vw;
+  font-weight: bolder;
+}
+
+.header {
+  margin-top: 40vh;
+  width: 100%;
+  text-align: center;
+  animation: blink 0.1s linear infinite;
+}
+@keyframes blink {
+  0% { color: red; }
+  50% { color: rgba(34, 34, 34, 0); }
+  100% { color: rgba(34, 34, 34, 1); }
 }
