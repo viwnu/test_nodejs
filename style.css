@@ -14,3 +14,8 @@ body {
   50% { color: rgba(34, 34, 34, 0); }
   100% { color: rgba(34, 34, 34, 1); }
 }
+
+.video {
+  margin-left: 35%;
+  width: 30%;
+}
