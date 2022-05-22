@@ -4,7 +4,7 @@ body {
 }
 
 .header {
-  margin-top: 40vh;
+  margin-top: 10vh;
   width: 100%;
   text-align: center;
   animation: blink 0.1s linear infinite;
