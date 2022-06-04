@@ -16,6 +16,7 @@ router.get('/style.css', function (req, res) {
 })
 
 router.get(/.*mp4/, function (req, res) {
+  res.type('video');
   res.sendfile('extreme-angry-bunny-angry-bunny.mp4');
 })
 
