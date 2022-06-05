@@ -1,0 +1,30 @@
+body {
+  font-size: 10vw;
+  font-weight: bolder;
+}
+
+.container {
+  padding: 0 10%;
+  overflow: hidden;
+}
+
+.post {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.post label {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.post p {
+  margin: 10% 0;
+}
+
+.post input,
+.post button {
+  font-size: 5vw;
+}
