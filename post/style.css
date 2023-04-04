@@ -28,3 +28,28 @@ body {
 .post button {
   font-size: 5vw;
 }
+
+.history {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: flex-start;
+}
+
+.history ul {
+  list-style: none;
+  font-size: 5vw;
+  font-weight: lighter;
+}
+
+.history li {
+  padding: 1%;
+}
+
+.history p {
+  margin: 0;
+  padding-left: 0.5em;
+  background-color: rgb(245, 245, 245);
+  border-radius: 0.2em;
+  border-bottom: solid 1px gray;
+}
