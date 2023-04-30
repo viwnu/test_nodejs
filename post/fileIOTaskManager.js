@@ -1,3 +1,5 @@
+// it is a some experimantation
+
 const {defrag, readBundle, writeBundle, deleteBundle} = require('fsOnClass.js')
 const Emitter = require("events");
 

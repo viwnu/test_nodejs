@@ -1,0 +1,31 @@
+{
+  "name": "restfull_file_io",
+  "version": "1.0.0",
+  "description": "Backend on express contains custom database with indexation and it can periodically defragmentation,in example frontend user can see the posts from database, create the new posts and delete them, frontend interact with backend through REST API",
+  "main": "expressApp.js",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.1",
+    "node": "^18.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viwnu/test_nodejs.git"
+  },
+  "keywords": [
+    "fileIO",
+    "REST",
+    "task",
+    "managment"
+  ],
+  "author": "viwnu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/viwnu/test_nodejs/issues"
+  },
+  "homepage": "https://github.com/viwnu/test_nodejs#readme"
+}
