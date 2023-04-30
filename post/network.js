@@ -1,7 +1,8 @@
-let form = document.querySelector("form");
-let input = form.querySelector('input');
-let button = form.querySelector('button');
+let form = document.querySelector("form")
+let input = form.querySelector('input')
+let button = form.querySelector('label > button')
 let history = document.querySelector('.history')
+
 
 let post = async (data, url) => {
   try {
@@ -13,11 +14,16 @@ let post = async (data, url) => {
       }
     });
 
+    // Если в response ошибка сервера или он занят попробовать еще разок
+    // при этом выставить прогресс бар или просто спиннер
+    // выставить максимально количество попыток, после которого выскочит ошибка
+
     // const res = await response;
     // console.log('Успех:', );
 
     const json = await response.json();
-    return (Object.values(json.sendData))
+    console.log('Успех:', json.sendData)
+    return (json.sendData)
 
   } catch (error) {
     console.error('Ошибка:', error);
@@ -37,7 +43,12 @@ let network = () => {
         const list = document.querySelector('.history > ul')
         const lastMessage = document.querySelector('.history > ul > li')
         const listItem = document.createElement('li')
-        listItem.innerHTML = `<p>${post[0].string}</p>`
+        listItem.setAttribute('strIndex', post[0]?.strIndex)
+        listItem.innerHTML = `<div>
+                                <p>${post[0]?.dataStr}</p>
+                                <button class = "delete_button">&#10006</button>
+                              </div>`
+                              
         list.insertBefore(listItem, lastMessage)
       })
 
@@ -51,10 +62,10 @@ let network = () => {
 let handler = (e) => {
   if(e.type == "keypress" && e.key =="Enter") {
     network();
-    event.preventDefault();
+    e.preventDefault();
   } else if(e.target == button && e.type == "click") {
     network();
-    event.preventDefault();
+    e.preventDefault();
   };
 };
 
@@ -74,25 +85,61 @@ const get = async (url) => {
     });
     
     const json = await response.json()
-    console.log('Успех:', typeof Object.values(json.sendData))
-    return (Object.values(json.sendData))
+    console.log('Успех:', json.sendData)
+    return (json.sendData)
   } catch (error) {
      console.error('Ошибка:', error);
   }
 }
 
 get("/post/get").then(posts => {
-  console.log(posts);
-
   const list = document.createElement('ul')
-
-  posts.forEach(element => {
-    console.log(element);
+  posts?.forEach(element => {
     const listItem = document.createElement('li')
-    listItem.innerHTML = `<p>${element.string}</p>`
+    listItem.setAttribute('strindex', element.strIndex)
+    listItem.innerHTML = `<div>
+                            <p>${element.dataStr}</p>
+                            <button class = "delete_button">&#10006</button>
+                          </div>`
     list.appendChild(listItem)
   })
 
   history.appendChild(list)
 })
+
+
+let historyItems = history.querySelectorAll('li')
+console.log(historyItems);
+
+const deleteNetwork = async (url, strIndex) => {
+  try {
+    const response = await fetch(url, {
+      method: 'DELETE',
+      body: JSON.stringify({strIndex}),
+      headers: {
+        'Content-Type': 'application/json',
+      }
+      })
+    
+      const json = await response.json()
+      console.log('Успех:', json.sendData)
+
+      return (json.sendData)
+  } catch (error) {console.error('in delete network: ' + error);}
+}
+
+let DeletePost = (e) => {
+  if(e.target.className == 'delete_button' && e.type == "click") {
+    const strIndex = e.target.closest('li').getAttribute('strindex')*1
+    deleteNetwork('/post/delete', strIndex)
+      .then((res) => {
+        console.log(res)
+        e.target.closest('li').remove()
+      })
+      .catch(err => console.error('network error: ' + err))
+    e.preventDefault()
+  }
+}
+
+history.addEventListener("click", DeletePost)
 

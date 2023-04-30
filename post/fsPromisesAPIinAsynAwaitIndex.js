@@ -25,6 +25,24 @@ const readData = async (file, indexses, startIndex, endIndex) => {
   } 
 }
 
+const deleteData = async (file, indexses, startIndex, endIndex) => {
+  try {
+    const start = startIndex < 0? -1: startIndex
+    deletePromises = []
+    for (let i = endIndex; i > start; i--) {
+      const length = (i == 0)? indexses[i]: indexses[i] - indexses[i-1]
+      const buf = new Buffer.alloc(length)
+      console.log('buffer is:')
+      console.log(buf);
+      const deletePromise = await file.write(buf, 0, length, 0)
+      deletePromises.push(deletePromise)
+    }
+    return (deletePromises)
+  } catch(err) {
+    console.log('Err in function delete: ' + err);
+  } 
+}
+
 const readIndex = async (indexFile) => {
   try {
     let readedIndexes = await indexFile.read(buf, 0, buf.length, 0)
@@ -34,14 +52,14 @@ const readIndex = async (indexFile) => {
   }
 }
 
-let fileIO = async function(dataFile, Nread=1, data=null) {
+let fileIO = async function(dataFile, Nread=[1,1], deleteString=false, data=null) {
   let file;
   try {
 
     file = await fs.open(dataFile, 'a+');
     
     const indexFile = dataFile.split('.')[0] + 'Index.txt'
-    fileIndex = await fs.open(indexFile, 'a+');
+    fileIndex = await fs.open(indexFile, 'a+')
 
     // throw new Error(`I am the ERROR`);
 
@@ -49,14 +67,18 @@ let fileIO = async function(dataFile, Nread=1, data=null) {
 
     const indexses = await readIndex(fileIndex)
     
-    const readedStrings = await readData(file, indexses, indexses.length-1-Nread, indexses.length-1)
+    const readedStrings = await readData(file, indexses, indexses.length-1-Nread[0], indexses.length-1)
+
+    if(deleteString) {
+      deleteData(file, indexses, Nread[1] - Nread[0], Nread[1])
+    }
         
     if(data != null) {
       const writeStringNumber = stat.size == 0? 0: readedStrings[0].number + 1
       let written = await file.write(writeStringNumber + '. ' + data + '\n')
       await fileIndex.write(JSON.stringify(stat.size + written.bytesWritten) + ',\n')
       const indexses = await readIndex(fileIndex)
-      return(await readData(file, indexses, indexses.length-1-Nread, indexses.length-1))
+      return(await readData(file, indexses, indexses.length-1-Nread[0], indexses.length-1))
     } else {
       return (readedStrings)
     }
@@ -70,10 +92,12 @@ let fileIO = async function(dataFile, Nread=1, data=null) {
   };
 };
 
-module.exports.readBundle = async (n) => fileIO('post/post.txt', n)
-module.exports.writeBundle = async (data) => fileIO('post/post.txt', 1, data)
+module.exports.readBundle = async (n) => fileIO('post/post.txt', [n, 1])
+module.exports.writeBundle = async (data) => fileIO('post/post.txt', [1,1], false, data)
+// module.exports.deleteBundle = async (n, start) => fileIO('post/post.txt', [n, start])
+// deleteBundle = async (n, start) => fileIO('post/post.txt', [n, start], true)
 
-
+// deleteBundle(1, 2).then((res) => console.log(res))
 // export {readBundle, writeBundle}
 
 //1. вынести чтение и запись в отдельные функции(которые что-то возвращают)

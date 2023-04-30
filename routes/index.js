@@ -6,7 +6,7 @@ const post = require('./post')
 router.use('/post', post)
 
 router.get('/', function (req, res) {
-    res.sendFile('../index.html', {root: '.'});
+    res.sendFile('./index.html', {root: '.'});
 })
   
 router.get('/test_nodejs', function (req, res) {
